@@ -4,7 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 const cors = require('cors');
 const twilio = require('twilio');   
- 
+var http = require('http');
 var AuthController = require('./api/AuthController');
 var patientRouter= require('./api/PatientService');
 
@@ -14,6 +14,7 @@ const authToken = '7dc390692e2d7d023c3ecd8bbbb46ca2';
 const client = new twilio(accountSid, authToken);
   
 const app = express(); //alias
+var Port = process.env.PORT || 4000 //alias
 
 app.use(cors()); //Blocks browser from restricting any data
 app.use(express.json());
@@ -43,4 +44,7 @@ app.get('/send-text', (req, res) => {
     }).then((message) => console.log(message.body));
 })
 
-app.listen(4000, () => console.log("Running on Port 4000"))
+var server = http.Server(app);
+server.listen(Port, function() {
+    console.log(' server running');
+  });
