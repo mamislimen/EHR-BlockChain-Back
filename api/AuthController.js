@@ -18,10 +18,8 @@ router.post ('/login',function(req,res)
  var login=req.body.login;
  var password=req.body.password;
  
-  axios.get('http://b0e413f5.ngrok.io/api/model.Patient')
-  .then(function (response) {
-
-   
+  axios.get('http://b0e413f5.ngrok.io/api/Patient')
+  .then(function (response) {    
   let crediential=[]
   
   response.data.forEach(function(user) {
@@ -73,7 +71,7 @@ router.post ('/login',function(req,res)
   
 
  async function getUser(idcard1) {
-  return await axios.get('http://b0e413f5.ngrok.io/api/model.Patient')
+  return await axios.get('http://b0e413f5.ngrok.io/api/Patient')
   .then( (response)=> {
     let u=[];
   response.data.forEach(function(user) {
@@ -90,7 +88,7 @@ router.post ('/login',function(req,res)
 }
 
  async function getPract(idcard2) {
-  return await axios.get('http://b0e413f5.ngrok.io/api/model.Practitioner')
+  return await axios.get('http://b0e413f5.ngrok.io/api/Practitioner')
   .then( (response) =>{
     let pract=[];
   response.data.forEach(function(user) {
@@ -106,7 +104,7 @@ router.post ('/login',function(req,res)
 
 }
 async function getPharmacy(idcard2) {
-  return await axios.get('http://b0e413f5.ngrok.io/api/model.Pharmacy')
+  return await axios.get('http://b0e413f5.ngrok.io/api/Pharmacy')
   .then( (response) =>{
     let Phar=[];
   response.data.forEach(function(user) {
