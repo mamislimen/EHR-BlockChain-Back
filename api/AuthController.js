@@ -18,29 +18,70 @@ router.post ('/login',function(req,res)
  var login=req.body.login;
  var password=req.body.password;
  
-  axios.get('http://34.247.209.188:3000/api/Patient')
-  .then(function (response) {    
-  let crediential=[]
+ async function getPatient(login,password) {
+  return await axios.get('http://34.247.209.188:3000/api/Patient')
+  .then( (response)=> {
+    let crediential=[]
   
   response.data.forEach(function(user) {
   
     if(user.username===login && user.password===password)
     crediential.push(user);
-   
+   return crediential;
 });
- token = jwt.sign({ id: crediential[0].patientId ,user:'patient'}, config.secret, {
-  expiresIn: 3600 // expires in 24 hours
-});
-    res.status(200).send({ auth: true, token: token,user:'patient' });
-  })
-  .catch(function (error) {
+  }).catch(function (error) {
     // handle error
     console.log(error);
-    res.status(200).send("erreur");
-  })
-  .then(function () {
-    // always executed
+  });}
+
+  async function getAdmin(login,password) {
+    return await axios.get('http://34.247.209.188:3000/api/Admin')
+    .then( (response)=> {
+      let crediential=[]
+    
+    response.data.forEach(function(user) {
+    
+      if(user.username===login && user.password===password)
+      crediential.push(user);
+     return crediential;
   });
+    }).catch(function (error) {
+      // handle error
+      console.log(error);
+    });}
+
+    axios.all([getPatient(login,password), getAdmin(login,password)])
+  .then(axios.spread(function (patient, admin) {
+    if (typeof patient !== 'undefined' && patient.length > 0) {
+      var payload = {
+        patientId: patient[0].patientId,
+        user: 'patient',
+       }; 
+       token = jwt.sign(payload, config.secret, {
+        expiresIn: 3600 // expires in 24 hours
+      });
+      
+          res.status(200).send({ auth: true, token: token,user:'patient' });
+  }else if (typeof admin !== 'undefined' && admin.length > 0) {
+    var payload = {
+      adminId: admin[0].adminId, 
+      user: 'admin', 
+  
+     };
+     token = jwt.sign(payload, config.secret, {
+      expiresIn: 3600 // expires in 24 hours
+    });
+        res.status(200).send({ auth: true, token: token,user:'admin' });
+}else
+{
+  res.status(200).send({ auth: false, token: null });
+}
+  
+
+  }));
+ 
+ 
+ 
 
   
 })
