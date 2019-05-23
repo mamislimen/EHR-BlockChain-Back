@@ -22,9 +22,7 @@ router.post ('/login',function(req,res)
   return await axios.get('http://34.247.209.188:3000/api/Patient')
   .then( (response)=> {
     let crediential=[]
-  
   response.data.forEach(function(user) {
-  
     if(user.username===login && user.password===password)
     crediential.push(user);
    return crediential;
@@ -74,17 +72,11 @@ router.post ('/login',function(req,res)
         res.status(200).send({ auth: true, token: token,user:'admin' });
 }else
 {
-  res.status(200).send({ auth: false, token: null });
+  res.status(200).send({ auth: false, token: null ,user:user});
 }
-  
-
   }));
- 
- 
- 
-
   
-})
+});
  
 
   router.get('/logout', function(req, res) {
