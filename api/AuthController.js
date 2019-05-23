@@ -35,13 +35,13 @@ router.post ('/login',function(req,res)
   async function getAdmin(login,password) {
     return await axios.get('http://34.247.209.188:3000/api/Admin')
     .then( (response)=> {
-      let crediential=[]
+      let credientials=[]
     
     response.data.forEach(function(user) {
     
       if(user.username===login && user.password===password)
-      crediential.push(user);
-     return crediential;
+      credientials.push(user);
+     return credientials;
   });
     }).catch(function (error) {
       // handle error
@@ -72,7 +72,7 @@ router.post ('/login',function(req,res)
         res.status(200).send({ auth: true, token: token,user:'admin' });
 }else
 {
-  res.status(200).send({ auth: false, token: null ,user:user});
+  res.status(200).send({ auth: false, token: null });
 }
   }));
   
