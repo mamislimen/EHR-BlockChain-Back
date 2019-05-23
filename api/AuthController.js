@@ -28,8 +28,8 @@ router.post ('/login',function(req,res)
     crediential.push(user);
    
 });
- token = jwt.sign({ id: crediential[0].patientId }, config.secret, {
-  expiresIn: 86400 // expires in 24 hours
+ token = jwt.sign({ id: crediential[0].patientId ,user:'patient'}, config.secret, {
+  expiresIn: 3600 // expires in 24 hours
 });
     res.status(200).send({ auth: true, token: token,user:'patient' });
   })
@@ -132,9 +132,10 @@ axios.all([getUser(idcard1), getPract(idcard2),getPharmacy(idcard2)])
         phoneNumber: practitioner[0].phoneNumber,
         speciality: practitioner[0].speciality, 
         addressLine: practitioner[0].addressLine,
+        user: 'practitioner',
        }; 
       token = jwt.sign(payload, config.secret, {
-        expiresIn: 86400 // expires in 24 hours
+        expiresIn: 3600 // expires in 24 hours
       });
           res.status(200).send({ auth: true, token: token,user:'practitioner' });
   }else if (typeof pharmacy !== 'undefined' && pharmacy.length > 0) {
@@ -144,10 +145,11 @@ axios.all([getUser(idcard1), getPract(idcard2),getPharmacy(idcard2)])
       name:pharmacy[0].name,
       addressLine: pharmacy[0].addressLine,
       phoneNumber: pharmacy[0].phoneNumber, 
+      user: 'pharmacy', 
   
      };
     token = jwt.sign(payload, config.secret, {
-      expiresIn: 86400 // expires in 24 hours
+      expiresIn: 3600 // expires in 24 hours
     });
         res.status(200).send({ auth: true, token: token,user:'pharmacy' });
 }else
