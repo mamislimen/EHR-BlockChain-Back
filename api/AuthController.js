@@ -72,7 +72,7 @@ router.post ('/login',function(req,res)
         res.status(200).send({ auth: true, token: token,user:'admin' });
 }else
 {
-  res.status(200).send({ auth: false, token: null });
+  res.status(200).send({ auth: false, token: null ,user:patient});
 }
   }));
   
