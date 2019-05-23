@@ -25,8 +25,9 @@ router.post ('/login',function(req,res)
   response.data.forEach(function(user) {
     if(user.username===login && user.password===password)
     crediential.push(user);
-   return crediential;
+ 
 });
+return crediential;
   }).catch(function (error) {
     // handle error
     console.log(error);
@@ -35,14 +36,19 @@ router.post ('/login',function(req,res)
   async function getAdmin(login,password) {
     return await axios.get('http://34.247.209.188:3000/api/Admin')
     .then( (response)=> {
+      console.log('response'+response.data);
+
       let credientials=[]
     
     response.data.forEach(function(user) {
     
       if(user.username===login && user.password===password)
       credientials.push(user);
-     return credientials;
+
+ 
   });
+
+  return credientials;
     }).catch(function (error) {
       // handle error
       console.log(error);
@@ -50,6 +56,8 @@ router.post ('/login',function(req,res)
 
     axios.all([getPatient(login,password), getAdmin(login,password)])
   .then(axios.spread(function (patient, admin) {
+    console.log(patient);
+    console.log(admin);
     if (typeof patient !== 'undefined' && patient.length > 0) {
       var payload = {
         patientId: patient[0].patientId,
@@ -72,7 +80,7 @@ router.post ('/login',function(req,res)
         res.status(200).send({ auth: true, token: token,user:'admin' });
 }else
 {
-  res.status(200).send({ auth: false, token: null ,user:patient});
+  res.status(200).send({ auth: false, token: null });
 }
   }));
   
